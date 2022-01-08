@@ -24,21 +24,19 @@ static void ft_putlstr(const char *str, t_cout *s,size_t len)
                 len--;
 		s->cpy_bytes--;
         }
-        free(s->set_buf);
 }
 static void ft_putfield(t_cout *s, size_t sp_index)
 {
-	printf("index %ld  fieldsize %ld\n",sp_index,s->field_size);
-       // while (sp_index && s->f_zero != 2)
-       // {
-       //         ft_putchar(' ', s);
-       //         sp_index--;
-       // }
-       // while (sp_index && s->f_zero == 2)
-       // {
-       //         ft_putchar('0', s);
-       //         sp_index--;\
-       // }
+        while (sp_index && s->f_zero != 2)
+        {
+                ft_putchar(' ', s);
+                sp_index--;
+        }
+        while (sp_index && s->f_zero == 2)
+        {
+                ft_putchar('0', s);
+                sp_index--;\
+        }
 }
 static void  ft_put_pluspace(t_cout *s)
 {
@@ -58,19 +56,22 @@ ssize_t ft_putstr_flagscheck(const char *str, t_cout *s)
         if (str == NULL)
                 str = "(null)";
         s_len = ft_strlen(str);
-        if (s->f_bar == SET)
-                ft_putfield(s,s->field_size - s_len);
+
         if (s->f_sp == SET || s->f_plus == SET)
                 ft_put_pluspace(s);
         if (s->f_sharp == SET && s->set_buf[0] != '0')
                 ft_putlstr("0x", s, 2);
 	if (s -> field_size == 0)
-	{
-		ft_putlstr(str, s, s_len);
-		return (SUCCESS);
-	}
-		ft_putlstr(str, s, s_len);
-        if (s->field_size > s_len)
+        {
+                ft_putlstr(str, s, s_len);
+                return (SUCCESS);
+        }
+	if (s->f_bar != SET && s->field_size > s_len)
+        {
+                ft_putfield(s,s->field_size - s_len);
+                ft_putlstr(str, s, s_len);
+        }
+        if (s->field_size > s_len && s->f_bar == SET)
         {
                 ft_putlstr(str, s, s_len);
                 ft_putfield(s, s->field_size - s_len);
