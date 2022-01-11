@@ -1,4 +1,20 @@
 #include "ft_printf_bonus.h"
+static void init_flags(t_cout *s)
+{
+	s->bite = 0;
+	s->field_size = 0;
+	s->f_bar = 0;
+	s->f_period = 0;
+	s->f_plus = 0;
+	s->f_sharp = 0;
+	s->f_sp = 0;
+	s->f_zero = 0;
+	s->period_size = 0;
+	s->index = 0;
+	s->mallocsize = 0;
+	s->set_buf = NULL;
+	s->cpy_bytes = 0;
+}
 ssize_t ft_putchar(char c, t_cout *s)
 {
         if (s -> sign == ERR && c == '\0')
@@ -24,6 +40,7 @@ static void ft_putlstr(const char *str, t_cout *s,size_t len)
                 len--;
 		s->cpy_bytes--;
         }
+	init_flags(s);
 }
 static void ft_putfield(t_cout *s, size_t sp_index)
 {
@@ -38,17 +55,6 @@ static void ft_putfield(t_cout *s, size_t sp_index)
                 sp_index--;\
         }
 }
-static void  ft_put_pluspace(t_cout *s)
-{
-        if (s->f_plus == SET && s->set_buf[0] != '-')
-        {
-                ft_putchar('+',s);
-        }
-        if (s->f_sp == SET && s->set_buf[0] != '-')
-        {
-                ft_putchar(' ',s);
-        }
-}
 ssize_t ft_putstr_flagscheck(const char *str, t_cout *s)
 {
         size_t s_len;
@@ -56,9 +62,6 @@ ssize_t ft_putstr_flagscheck(const char *str, t_cout *s)
         if (str == NULL)
                 str = "(null)";
         s_len = ft_strlen(str);
-
-        if (s->f_sp == SET || s->f_plus == SET)
-                ft_put_pluspace(s);
         if (s->f_sharp == SET && s->set_buf[0] != '0')
                 ft_putlstr("0x", s, 2);
 	if (s -> field_size == 0)
@@ -76,7 +79,7 @@ ssize_t ft_putstr_flagscheck(const char *str, t_cout *s)
                 ft_putlstr(str, s, s_len);
                 ft_putfield(s, s->field_size - s_len);
         }
-        else if (s_len > s->field_size)
-                ft_putlstr(str,s,s->field_size);
+        ft_putlstr(str,s,s->field_size);
+	s->f_sharp = 0;
         return (1);
 }

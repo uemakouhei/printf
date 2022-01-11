@@ -1,7 +1,28 @@
 #include "ft_printf_bonus.h"
+void    *ft_memcpy(void *dst, const void *src, size_t n)
+{
+        const char      *srcpt;
+        char            *pt;
 
-void    *ft_memcpy(void *dst, const void *src, size_t n);
-void    ft_bzero(void *s, size_t n);
+        srcpt = (char *)src;
+        pt = (char *)dst;
+        if (pt == NULL && srcpt == NULL)
+                return (NULL);
+        while (n--)
+        {
+                *pt++ = *srcpt++;
+        }
+        return (dst);
+}
+void    ft_bzero(void *s, size_t n)
+{
+        char    *pt;
+
+        pt = (char *)s;
+        while (n-- != 0)
+                *pt++ = '\0';
+}
+
 void    *ft_calloc(size_t count, size_t size)
 {
 	void    *pt;
@@ -28,26 +49,10 @@ void    *ft_calloc(size_t count, size_t size)
 	ft_bzero(pt, allocate);
 	return (pt);
 }
-void    *ft_memcpy(void *dst, const void *src, size_t n)
+int     ft_isprint(int c)
 {
-	const char      *srcpt;
-	char            *pt;
-
-	srcpt = (char *)src;
-	pt = (char *)dst;
-	if (pt == NULL && srcpt == NULL)
-		return (NULL);
-	while (n--)
-	{
-		*pt++ = *srcpt++;
-	}
-	return (dst);
+        if (c >= 32 && c <= 126)
+                return (1);
+        return (0);
 }
-void    ft_bzero(void *s, size_t n)
-{
-	char    *pt;
 
-	pt = (char *)s;
-	while (n-- != 0)
-		*pt++ = '\0';
-}

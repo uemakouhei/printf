@@ -28,6 +28,7 @@ static void set_flags(const char *str, t_cout *s)
 }
 static int	formatcheck(const char *str, t_cout *s, va_list list)
 {
+	set_flags(str,s);
 	if (s == NULL)
 		return (0);
 	if (*str == 's')
@@ -49,21 +50,20 @@ static int	formatcheck(const char *str, t_cout *s, va_list list)
 		ft_basewrite(va_arg(list, unsigned int), "0123456789abcdef", s);
 	else if (*str == 'X')
 		ft_basewrite(va_arg(list, unsigned int), "0123456789ABCDEF", s);
-	set_flags(str,s);
 	return (1);
 }
 static const char* flagscheck(const char *str, t_cout *s)
 {       
 	if (*str == '-')
-		s->f_bar++;
+		s->f_bar = 1;
 	else if (*str == '#')
-		s->f_sharp++;
+		s->f_sharp = 1;
 	else if (*str == '0') 
-		s->f_zero++;
+		s->f_zero = 1;
 	else if (*str == ' ')
-		s->f_sp++;
+		s->f_sp = 1;
 	else if (*str == '+')
-		s->f_plus++;
+		s->f_plus = 1;
 	if (ft_strchr("-#0 +",*str))
 		str++;
 	if (ft_isdigit(*str))
@@ -75,7 +75,7 @@ static const char* flagscheck(const char *str, t_cout *s)
 	if (*str == '.')
 	{
 		str++;
-		s->f_period++;
+		s->f_period = 1;
 		s->period_size = ft_atoi(str);
 		while(ft_isdigit(*str))
 			str++;
@@ -97,8 +97,6 @@ static int	doprint(const char *s, va_list list)
 			s = flagscheck(s,&cout);
 			s += formatcheck(s, &cout, list);
 			ft_putstr_flagscheck(cout.set_buf,&cout);
-			cout.bite = 0;
-			cout.cpy_bytes = 0;
 		}
 		else
 			ft_putchar(*s++, &cout);

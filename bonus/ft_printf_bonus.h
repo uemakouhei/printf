@@ -66,4 +66,5 @@ ssize_t ft_basewrite(unsigned long long n, char *base, t_cout *s);
 ssize_t ft_setstr(const char *str, t_cout *s);
 ssize_t ft_setchar(char c, t_cout *s);
 int ft_atoi(const char *a);
+int     ft_isprint(int c);
 #endif
